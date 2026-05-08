@@ -1,27 +1,13 @@
-from django.conf import settings
 from django.utils.module_loading import import_string
 
-from django_event_bus.event_bus.bus import EventBus
-from django_event_bus.event_bus.config import EventBusConfig
+from django_event_bus.client import get_event_bus
 
 
 def start_consumer():
-    cfg = settings.EVENT_BUS
+    bus = get_event_bus()
 
-    config = EventBusConfig(
-        host=cfg['HOST'],
-        port=cfg['PORT'],
-        user=cfg['USER'],
-        password=cfg['PASSWORD'],
-        vhost=cfg['VHOST'],
-        service_name=cfg['SERVICE_NAME'],
-        exchange=cfg['EXCHANGE'],
-    )
-
-    bus = EventBus(config)
-
-    for consumer in cfg.get('CONSUMERS', []):
-        print('registering consumer {}'.format(consumer))
+    for consumer in bus.config.consumers:
+        print(f'registering consumer {consumer}')
         handler = import_string(consumer['handler'])
 
         bus.subscribe(

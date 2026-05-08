@@ -1,0 +1,19 @@
+from django.conf import settings
+
+from django_event_bus.event_bus.bus import EventBus
+from django_event_bus.event_bus.config import EventBusConfig
+
+
+def get_event_bus() -> EventBus:
+    conf = settings.EVENT_BUS
+    config = EventBusConfig(
+        host=conf.get('HOST', 'event-bus-rabbitmq'),
+        port=conf.get('PORT', 5672),
+        user=conf.get('USER', 'pro2_dev'),
+        password=conf.get('PASSWORD', '123456'),
+        vhost=conf.get('VHOST', '/dev'),
+        service_name=conf.get('SERVICE_NAME', 'pro2_dev'),
+        exchange=conf.get('EXCHANGE', 'events'),
+        consumers=conf.get('CONSUMERS', []),
+    )
+    return EventBus(config)

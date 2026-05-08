@@ -6,6 +6,7 @@ from django_event_bus.consumer import start_consumer
 
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
     help = 'Run event bus consumer'
 
