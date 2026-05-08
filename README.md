@@ -42,9 +42,11 @@ EVENT_BUS = {
 
 ### Publishing events
 ```python
-from django_event_bus import EventBusConfig, EventBus
 
-bus = EventBus(config)
+from django_event_bus.client import get_event_bus
+
+
+bus = get_event_bus()
 
 bus.publish('user.registered', {
     'user_id': 123,
