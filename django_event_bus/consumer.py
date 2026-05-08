@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.utils.module_loading import import_string
 
-from django_event_bus import EventBus, EventBusConfig
+from django_event_bus.event_bus.bus import EventBus
+from django_event_bus.event_bus.config import EventBusConfig
 
 
 def start_consumer():

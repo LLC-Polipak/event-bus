@@ -1,6 +1,6 @@
-from apps.events.event_bus.connection import create_connection
-from apps.events.event_bus.consumer import Consumer
-from apps.events.event_bus.publisher import Publisher
+from django_event_bus.event_bus.connection import create_connection
+from django_event_bus.event_bus.consumer import Consumer
+from django_event_bus.event_bus.publisher import Publisher
 
 
 class EventBus:

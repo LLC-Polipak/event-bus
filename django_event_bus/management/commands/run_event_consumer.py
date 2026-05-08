@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from django_event_bus import start_consumer
+from django_event_bus.consumer import start_consumer
 
 
 class Command(BaseCommand):

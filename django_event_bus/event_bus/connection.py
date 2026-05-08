@@ -1,11 +1,13 @@
 import time
+from typing import TYPE_CHECKING
 
 import pika
 
-from django_event_bus import EventBusConfig
+if TYPE_CHECKING:
+    from django_event_bus.event_bus.config import EventBusConfig
 
 
-def create_connection(config: EventBusConfig, retries=5):
+def create_connection(config: 'EventBusConfig', retries=5):
     credentials = pika.PlainCredentials(config.user, config.password)
 
     for _attempt in range(retries):
