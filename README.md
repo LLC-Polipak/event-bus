@@ -5,8 +5,8 @@ Reusable event bus based on RabbitMQ for Django projects.
 ## Installation
 
 ```bash
-pip install git+https://github.com/username/django_event_bus.git
- #TODO pip install django-event-bus
+pip install event_bus git+https://github.com/LLC-Polipak/event-bus.git   
+ #TODO pip install event-bus
 ```
 
 ### Add to INSTALLED_APPS:
