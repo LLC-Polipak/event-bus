@@ -53,5 +53,5 @@ bus.publish('user.registered', {
 ```
 ## Running consumer
 ```bash
-python manage.py run_bus
+python manage.py run_event_consumer
 ```
