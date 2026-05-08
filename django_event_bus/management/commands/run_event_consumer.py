@@ -11,5 +11,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print('Running event bus consumer')
-        logger.info('running event bus consumer')
         start_consumer()
