@@ -1,9 +1,12 @@
+import logging
+
 from django.conf import settings
 from django.utils.module_loading import import_string
 
 from django_event_bus.event_bus.bus import EventBus
 from django_event_bus.event_bus.config import EventBusConfig
 
+logger = logging.getLogger(__name__)
 
 def start_consumer():
     cfg = settings.EVENT_BUS
@@ -21,6 +24,7 @@ def start_consumer():
     bus = EventBus(config)
 
     for consumer in cfg.get('CONSUMERS', []):
+        logger.info('registering consumer {}'.format(consumer))
         handler = import_string(consumer['handler'])
 
         bus.subscribe(
