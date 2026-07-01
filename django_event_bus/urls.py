@@ -4,7 +4,7 @@ urlpatterns = [
     path(
         'api/',
         include(
-            'dango_event_bus.api.urls',
+            'django_event_bus.api.urls',
         ),
     ),
 ]
