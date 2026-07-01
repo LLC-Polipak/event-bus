@@ -2,7 +2,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path(
-        'api/',
+        'api/v1/',
         include(
             'django_event_bus.api.urls',
         ),
