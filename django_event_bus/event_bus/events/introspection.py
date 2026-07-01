@@ -1,7 +1,7 @@
 import dataclasses
 from typing import get_type_hints
 
-from event_bus.events.metadata import EventField
+from django_event_bus.event_bus.events.metadata import EventField
 
 
 def get_event_fields(
