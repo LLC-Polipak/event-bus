@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from typing import Callable
 
 from django_event_bus.event_bus.events.introspection import (
     build_event_title,
@@ -18,19 +18,22 @@ def event(
     def decorator(
         target: type,
     ) -> type:
-        register_event(
-            EventDefinition(
-                code=code,
-                title=title
-                or build_event_title(
-                    target,
-                ),
-                description=target.__doc__,
-                target=target,
-                fields=get_event_fields(
-                    target,
-                ),
+        definition = EventDefinition(
+            code=code,
+            title=title or build_event_title(
+                target,
             ),
+            description=target.__doc__,
+            target=target,
+            fields=get_event_fields(
+                target,
+            ),
+        )
+
+        target.__event_definition__ = definition
+
+        register_event(
+            definition,
         )
 
         return target
