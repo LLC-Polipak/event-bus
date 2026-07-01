@@ -4,7 +4,7 @@ urlpatterns = [
     path(
         'api/',
         include(
-            'api.urls',
+            'dango_event_bus.api.urls',
         ),
     ),
 ]
