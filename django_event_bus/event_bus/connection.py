@@ -12,9 +12,9 @@ def create_connection(config: 'EventBusConfig', retries=10, delay=5):
         config.user,
         config.password,
     )
-    
+
     last_exception = None
-    
+
     for attempt in range(1, retries + 1):
         try:
             print(
@@ -22,7 +22,7 @@ def create_connection(config: 'EventBusConfig', retries=10, delay=5):
                 f'{attempt}/{retries} '
                 f'to {config.host}:{config.port}'
             )
-            
+
             return pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=config.host,
@@ -36,17 +36,14 @@ def create_connection(config: 'EventBusConfig', retries=10, delay=5):
                     retry_delay=0,
                 )
             )
-        
+
         except Exception as e:
             last_exception = e
-            
-            print(
-                f'[RabbitMQ] Connection failed: '
-                f'{type(e).__name__}: {e}'
-            )
-            
+
+            print(f'[RabbitMQ] Connection failed: {type(e).__name__}: {e}')
+
             time.sleep(delay)
-    
+
     raise RuntimeError(
         f'Could not connect to RabbitMQ '
         f'after {retries} attempts '
