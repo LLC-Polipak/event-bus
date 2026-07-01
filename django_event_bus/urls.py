@@ -4,7 +4,7 @@ urlpatterns = [
     path(
         'api/',
         include(
-            'event_bus.api.urls',
+            'api.urls',
         ),
     ),
 ]
