@@ -12,10 +12,11 @@ if TYPE_CHECKING:
 
 
 class ConnectionManager:
-    _connection: 'BlockingConnection'
+    _connection: 'BlockingConnection | None'
 
     def __init__(self, *, config: 'EventBusConfig'):
         self.config = config
+        self._connection = None
 
         # NB: Первое подключение сразу после инициализации(ПРОВЕРКА СОЕДИНЕНИЯ)
         self._connection = self.connection

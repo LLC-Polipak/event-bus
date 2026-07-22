@@ -16,4 +16,4 @@ def get_event_bus() -> EventBus:
         exchange=conf.get('EXCHANGE', 'events'),
         consumers=conf.get('CONSUMERS', []),
     )
-    return EventBus(config)
+    return EventBus(config=config)
