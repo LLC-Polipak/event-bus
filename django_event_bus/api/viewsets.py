@@ -10,10 +10,7 @@ class EventViewSet(
 ):
     """Предоставляет зарегистрированные события."""
 
-    def list(
-        self,
-        request,
-    ):
+    def list(self, request):
         """Возвращает список зарегистрированных событий."""
 
         serializer = EventDefinitionSerializer(
@@ -25,11 +22,7 @@ class EventViewSet(
             serializer.data,
         )
 
-    def retrieve(
-        self,
-        request,
-        pk=None,
-    ):
+    def retrieve(self, request, pk=None,):
         """Возвращает описание зарегистрированного события."""
 
         serializer = EventDefinitionSerializer(

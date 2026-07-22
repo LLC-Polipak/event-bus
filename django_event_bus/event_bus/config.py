@@ -10,4 +10,5 @@ class EventBusConfig:
     vhost: str
     service_name: str
     exchange: str = 'events'
+    exchange_type: str = 'topic'
     consumers: list[dict] = list
