@@ -1,4 +1,4 @@
-from typing import Callable
+from collections.abc import Callable
 
 from django_event_bus.event_bus.events.introspection import (
     build_event_title,
@@ -20,7 +20,8 @@ def event(
     ) -> type:
         definition = EventDefinition(
             code=code,
-            title=title or build_event_title(
+            title=title
+            or build_event_title(
                 target,
             ),
             description=target.__doc__,

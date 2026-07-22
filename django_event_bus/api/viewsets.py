@@ -22,7 +22,11 @@ class EventViewSet(
             serializer.data,
         )
 
-    def retrieve(self, request, pk=None,):
+    def retrieve(
+        self,
+        request,
+        pk=None,
+    ):
         """Возвращает описание зарегистрированного события."""
 
         serializer = EventDefinitionSerializer(

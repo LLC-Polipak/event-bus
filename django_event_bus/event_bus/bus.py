@@ -5,19 +5,53 @@ from django_event_bus.event_bus.consumer import Consumer
 from django_event_bus.event_bus.publisher import Publisher
 
 if TYPE_CHECKING:
-    from django_event_bus.event_bus.message import Event
+    from pika import BlockingConnection
+
     from django_event_bus.event_bus.config import EventBusConfig
+    from django_event_bus.event_bus.message import Event
+
+
+class ConnectionManager:
+    _connection: 'BlockingConnection'
+
+    def __init__(self, *, config: 'EventBusConfig'):
+        self.config = config
+
+        # NB: Первое подключение сразу после инициализации(ПРОВЕРКА СОЕДИНЕНИЯ)
+        self._connection = self.connection
+
+    @property
+    def connection(self) -> 'BlockingConnection':
+        if self._connection is None or self._connection.is_closed:
+            self._connection = create_connection(self.config)
+
+        return self._connection
+
+    def get_channel(self):
+        channel = self.connection.channel()
+
+        channel.exchange_declare(
+            exchange=self.config.exchange,
+            exchange_type=self.config.exchange_type,
+            durable=True,
+        )
+
+        return channel
+
 
 class EventBus:
-    def __init__(self, config: "EventBusConfig"):
+    def __init__(self, *, config: 'EventBusConfig'):
         self.config = config
-        self.connection = create_connection(self.config)
-        self.channel = self.connection.channel()
+        self.connection_manager = ConnectionManager(config=config)
 
-        self.publisher = Publisher(self.channel, self.config)
-        self.consumer = Consumer(self.channel, self.config)
+        self.publisher = Publisher(
+            connection_manager=self.connection_manager, exchange=config.exchange
+        )
+        self.consumer = Consumer(
+            connection_manager=self.connection_manager, exchange=config.exchange
+        )
 
-    def publish(self, event: "Event",  *, source=None):
+    def publish(self, event: 'Event', *, source=None):
         if source is None:
             source = self.config.service_name
         self.publisher.publish(source, event)

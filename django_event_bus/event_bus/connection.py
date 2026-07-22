@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 def create_connection(config: 'EventBusConfig', retries=10, delay=5):
+    """Создает соединение с RabbitMQ"""
     credentials = pika.PlainCredentials(
         config.user,
         config.password,
