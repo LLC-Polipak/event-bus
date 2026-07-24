@@ -69,7 +69,8 @@ class Consumer:
         for source, event, handler in self.subscriptions:
             routing_key = f'{source}.{event}'
             queue_name = (
-                f'{self.connection_manager.config.service_name}.{source}.{event}'
+                f'{self.connection_manager.config.service_name}.'
+                f'{handler.__module__}.{handler.__qualname__}'
             )
 
             self.channel.queue_declare(
