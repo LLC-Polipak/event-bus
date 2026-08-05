@@ -90,6 +90,11 @@ class Consumer:
             )
 
     def start(self):
+        if not self.subscriptions:
+            raise RuntimeError(
+                "No event consumers are configured or all consumers are disabled."
+            ) from None
+        
         while True:
             self._channel = None
             self._prepare_subscriptions()

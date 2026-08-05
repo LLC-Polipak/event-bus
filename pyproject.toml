@@ -19,6 +19,9 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Development Status :: 4 - Beta",
 ]
+[tool.setuptools.packages.find]
+include = ["django_event_bus*"]
+exclude = ["infra*"]
 
 [project.urls]
 Homepage = "https://github.com/LLC-Polipak/event-bus"

@@ -3,4 +3,5 @@
 .idea
 /dist/
 **/__pycache__/
-/event_bus.egg-info
+/*.egg-info/
+*.sqlite3
