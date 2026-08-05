@@ -1,0 +1,28 @@
+name: 'event-bus'
+
+services:
+  event-bus-rabbitmq:
+    image: rabbitmq:4-management
+    hostname: rabbitmq
+    restart: unless-stopped
+
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+
+    env_file:
+      - .env
+
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    networks:
+      - event_bus_net
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  event_bus_net:
+    external: true
+    name: event_bus_net
