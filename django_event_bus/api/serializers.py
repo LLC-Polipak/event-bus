@@ -1,5 +1,7 @@
 """Преобразование метаданных событий в представление HTTP API."""
 
+from typing import Any, get_origin
+
 from rest_framework import serializers
 
 from django_event_bus.event_bus.events.metadata import EventDefinition, EventField
@@ -28,11 +30,26 @@ class EventFieldSerializer(
         if obj.annotation is None:
             return None
 
+        if get_origin(obj.annotation) is not None:
+            return str(obj.annotation).removeprefix('typing.')
+
         return getattr(
             obj.annotation,
             '__name__',
             str(obj.annotation),
         )
+
+    def to_representation(self, instance: EventField) -> dict[str, Any]:
+        """Добавить рекурсивное описание полей для вложенного dataclass."""
+        representation = super().to_representation(instance)
+
+        if instance.fields:
+            representation['fields'] = EventFieldSerializer(
+                instance.fields,
+                many=True,
+            ).data
+
+        return representation
 
 
 class EventDefinitionSerializer(

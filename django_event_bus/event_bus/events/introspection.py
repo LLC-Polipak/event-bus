@@ -21,33 +21,51 @@ def get_event_fields(
             f'"{event.__qualname__}" должен быть dataclass.',
         )
 
-    type_hints = get_type_hints(
+    return _get_event_fields(
         event,
+        ancestors=frozenset({event}),
     )
+
+
+def _get_event_fields(
+    event: type,
+    *,
+    ancestors: frozenset[type],
+) -> list[EventField]:
+    """Рекурсивно собрать поля dataclass с защитой от циклических ссылок."""
+    type_hints = get_type_hints(event)
 
     fields: list[EventField] = []
 
-    for field in dataclasses.fields(
+    for dataclass_field in dataclasses.fields(
         event,
     ):
         required = (
-            field.default is dataclasses.MISSING
-            and field.default_factory is dataclasses.MISSING
+            dataclass_field.default is dataclasses.MISSING
+            and dataclass_field.default_factory is dataclasses.MISSING
         )
 
         default = None
 
-        if field.default is not dataclasses.MISSING:
-            default = field.default
+        if dataclass_field.default is not dataclasses.MISSING:
+            default = dataclass_field.default
+
+        annotation = type_hints.get(dataclass_field.name)
+        nested_fields: list[EventField] = []
+
+        if dataclasses.is_dataclass(annotation) and annotation not in ancestors:
+            nested_fields = _get_event_fields(
+                annotation,
+                ancestors=ancestors | {annotation},
+            )
 
         fields.append(
             EventField(
-                name=field.name,
-                annotation=type_hints.get(
-                    field.name,
-                ),
+                name=dataclass_field.name,
+                annotation=annotation,
                 required=required,
                 default=default,
+                fields=nested_fields,
             ),
         )
 

@@ -1,6 +1,6 @@
 """Структуры метаданных зарегистрированных событий и их полей."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -12,6 +12,7 @@ class EventField:
     annotation: Any
     required: bool
     default: Any
+    fields: list['EventField'] = field(default_factory=list)
 
 
 @dataclass(slots=True)
