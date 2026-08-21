@@ -1,6 +1,9 @@
 """Интеграционные тесты публикации метаданных событий через HTTP API."""
 
-from django.test import Client
+from django.conf import settings
+from django.test import Client, override_settings
+
+from django_event_bus.urls import build_urlpatterns
 
 from users.events import (
     Address,
@@ -155,3 +158,16 @@ def test_event_list_is_rendered_in_browser(client: Client) -> None:
 
     assert response.status_code == 200
     assert 'user.created' in response.content.decode()
+
+
+@override_settings(
+    EVENT_BUS={
+        **settings.EVENT_BUS,
+        'API_PATH': '/internal/event-bus/events/',
+    },
+)
+def test_event_api_path_is_configurable() -> None:
+    """Построить маршрут API из нормализованного значения EVENT_BUS.API_PATH."""
+    [url_pattern] = build_urlpatterns()
+
+    assert str(url_pattern.pattern) == 'internal/event-bus/events/'

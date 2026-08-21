@@ -12,6 +12,7 @@ DEFAULT_EVENT_BUS_CONFIG = {
     'VHOST': '/',
     'SERVICE_NAME': 'unknown_service',
     'EXCHANGE': 'events',
+    'API_PATH': 'api/v1/events/',
     'CONSUMERS': [],
 }
 

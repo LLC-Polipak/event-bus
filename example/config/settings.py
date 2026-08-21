@@ -124,6 +124,7 @@ EVENT_BUS = {
     'VHOST': '/',
     'SERVICE_NAME': 'example_service_name',
     'EXCHANGE': 'events',  # optional, default: 'events'
+    'API_PATH': 'api/v1/events/',  # optional, default: 'api/v1/events/'
     'CONSUMERS': [
         {
             'enabled': False,
