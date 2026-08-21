@@ -1,3 +1,5 @@
+"""Подписка RabbitMQ-очередей на события и передача сообщений обработчикам."""
+
 from typing import TYPE_CHECKING
 
 from pika.exceptions import AMQPConnectionError
@@ -9,6 +11,8 @@ if TYPE_CHECKING:
 
 
 class Consumer:
+    """Потребитель событий с отдельной очередью для каждого обработчика."""
+
     def __init__(
         self,
         connection_manager: 'ConnectionManager',
@@ -21,6 +25,7 @@ class Consumer:
 
     @property
     def channel(self):
+        """Вернуть активный RabbitMQ-канал, пересоздав закрытый."""
         if self._channel is None or self._channel.is_closed:
             self._channel = self.connection_manager.get_channel()
 
@@ -32,6 +37,7 @@ class Consumer:
         event: str,
         handler,
     ):
+        """Добавить обработчик в список подписок на событие."""
         self.subscriptions.append(
             (
                 source,
@@ -90,11 +96,16 @@ class Consumer:
             )
 
     def start(self):
+        """Подготовить подписки и запустить бесконечное потребление событий.
+
+        Raises:
+            RuntimeError: Ни один обработчик не зарегистрирован.
+        """
         if not self.subscriptions:
             raise RuntimeError(
-                "No event consumers are configured or all consumers are disabled."
+                'No event consumers are configured or all consumers are disabled.'
             ) from None
-        
+
         while True:
             self._channel = None
             self._prepare_subscriptions()

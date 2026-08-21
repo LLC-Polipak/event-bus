@@ -1,3 +1,5 @@
+"""Координация RabbitMQ-соединения, публикатора и consumer event bus."""
+
 from typing import TYPE_CHECKING
 
 from django_event_bus.event_bus.connection import create_connection
@@ -12,6 +14,8 @@ if TYPE_CHECKING:
 
 
 class ConnectionManager:
+    """Управляет блокирующим RabbitMQ-соединением и каналами."""
+
     _connection: 'BlockingConnection | None'
 
     def __init__(self, *, config: 'EventBusConfig'):
@@ -23,12 +27,14 @@ class ConnectionManager:
 
     @property
     def connection(self) -> 'BlockingConnection':
+        """Вернуть активное RabbitMQ-соединение, пересоздав закрытое."""
         if self._connection is None or self._connection.is_closed:
             self._connection = create_connection(self.config)
 
         return self._connection
 
     def get_channel(self):
+        """Создать RabbitMQ-канал и объявить в нём exchange event bus."""
         channel = self.connection.channel()
 
         channel.exchange_declare(
@@ -41,6 +47,8 @@ class ConnectionManager:
 
 
 class EventBus:
+    """Единая точка публикации и потребления событий через RabbitMQ."""
+
     def __init__(self, *, config: 'EventBusConfig'):
         self.config = config
         self.connection_manager = ConnectionManager(config=config)
@@ -53,12 +61,15 @@ class EventBus:
         )
 
     def publish(self, event: 'Event', *, source=None):
+        """Опубликовать событие от имени указанного или текущего сервиса."""
         if source is None:
             source = self.config.service_name
         self.publisher.publish(source, event)
 
     def subscribe(self, source: str, event: str, handler):
+        """Зарегистрировать обработчик события от заданного источника."""
         self.consumer.subscribe(source, event, handler)
 
     def run(self):
+        """Запустить блокирующее потребление зарегистрированных событий."""
         self.consumer.start()

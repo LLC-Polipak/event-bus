@@ -1,7 +1,11 @@
+"""Конфигурация Django-приложения users."""
+
 from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
+    """Подключает приложение users и регистрирует его события."""
+
     name = 'users'
 
     def ready(self) -> None:

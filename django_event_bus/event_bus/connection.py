@@ -1,3 +1,5 @@
+"""Создание блокирующих RabbitMQ-соединений с повторными попытками."""
+
 import time
 from typing import TYPE_CHECKING
 
@@ -8,7 +10,19 @@ if TYPE_CHECKING:
 
 
 def create_connection(config: 'EventBusConfig', retries=10, delay=5):
-    """Создает соединение с RabbitMQ"""
+    """Установить RabbitMQ-соединение за ограниченное число попыток.
+
+    Args:
+        config: Параметры RabbitMQ-соединения.
+        retries: Максимальное число попыток подключения.
+        delay: Задержка между попытками в секундах.
+
+    Returns:
+        Активное блокирующее RabbitMQ-соединение.
+
+    Raises:
+        RuntimeError: Все попытки подключения завершились ошибкой.
+    """
     credentials = pika.PlainCredentials(
         config.user,
         config.password,

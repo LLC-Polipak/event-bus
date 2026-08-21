@@ -1,9 +1,12 @@
+"""Запуск обработчиков событий, описанных в Django settings."""
+
 from django.utils.module_loading import import_string
 
 from django_event_bus.client import get_event_bus
 
 
 def start_consumer():
+    """Подписать включённые обработчики и запустить consumer."""
     bus = get_event_bus()
 
     for consumer in bus.config.consumers:

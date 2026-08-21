@@ -1,6 +1,4 @@
-"""
-Настройки по умолчанию и валидация
-"""
+"""Формирование и валидация конфигурации event bus из Django settings."""
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -19,7 +17,7 @@ DEFAULT_EVENT_BUS_CONFIG = {
 
 
 def get_event_bus_config():
-    """Получить конфиг с дефолтными значениями"""
+    """Вернуть конфигурацию event bus со значениями по умолчанию."""
     user_config = getattr(settings, 'EVENT_BUS', {})
 
     # Мержим с дефолтами
@@ -30,7 +28,11 @@ def get_event_bus_config():
 
 
 def validate_event_bus_settings():
-    """Проверка обязательных настроек"""
+    """Проверить наличие обязательных параметров event bus.
+
+    Raises:
+        ImproperlyConfigured: Обязательный парамет не задан.
+    """
     config = get_event_bus_config()
 
     required_fields = ['HOST', 'PORT', 'USER', 'PASSWORD', 'SERVICE_NAME']

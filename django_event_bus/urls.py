@@ -1,3 +1,5 @@
+"""Корневые URL-маршруты HTTP API пакета Django Event Bus."""
+
 from django.urls import include, path
 
 urlpatterns = [

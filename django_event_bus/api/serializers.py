@@ -1,3 +1,5 @@
+"""Преобразование метаданных событий в представление HTTP API."""
+
 from rest_framework import serializers
 
 from django_event_bus.event_bus.events.metadata import EventDefinition, EventField
@@ -23,7 +25,6 @@ class EventFieldSerializer(
         obj: EventField,
     ) -> str | None:
         """Возвращает имя типа поля."""
-
         if obj.annotation is None:
             return None
 
@@ -59,5 +60,4 @@ class EventDefinitionSerializer(
         obj: EventDefinition,
     ) -> str:
         """Возвращает полное имя класса события."""
-
         return f'{obj.target.__module__}.{obj.target.__qualname__}'

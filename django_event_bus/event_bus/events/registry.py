@@ -1,3 +1,5 @@
+"""Хранение и поиск метаданных событий, зарегистрированных декораторами."""
+
 from django_event_bus.event_bus.events.metadata import EventDefinition
 
 EVENT_REGISTRY: dict[str, EventDefinition] = {}
@@ -6,8 +8,11 @@ EVENT_REGISTRY: dict[str, EventDefinition] = {}
 def register_event(
     definition: EventDefinition,
 ) -> None:
-    """Регистрирует событие."""
+    """Добавить определение события в registry.
 
+    Raises:
+        ValueError: Событие с таким кодом уже зарегистрировано.
+    """
     if definition.code in EVENT_REGISTRY:
         raise ValueError(
             f'Событие "{definition.code}" уже зарегистрировано.',
@@ -19,14 +24,16 @@ def register_event(
 def get_event(
     code: str,
 ) -> EventDefinition:
-    """Возвращает зарегистрированное событие."""
+    """Вернуть определение события по уникальному коду.
 
+    Raises:
+        KeyError: Событие с указанным кодом не зарегистрировано.
+    """
     return EVENT_REGISTRY[code]
 
 
 def get_events() -> list[EventDefinition]:
-    """Возвращает все зарегистрированные события."""
-
+    """Вернуть снимок всех определений из registry."""
     return list(
         EVENT_REGISTRY.values(),
     )
@@ -35,6 +42,5 @@ def get_events() -> list[EventDefinition]:
 def has_event(
     code: str,
 ) -> bool:
-    """Проверяет, зарегистрировано ли событие."""
-
+    """Проверить наличие определения события с указанным кодом."""
     return code in EVENT_REGISTRY

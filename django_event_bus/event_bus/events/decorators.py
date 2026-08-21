@@ -1,3 +1,5 @@
+"""Декораторы для объявления и регистрации dataclass-событий."""
+
 from collections.abc import Callable
 
 from django_event_bus.event_bus.events.introspection import (
@@ -13,7 +15,19 @@ def event(
     code: str,
     title: str | None = None,
 ) -> Callable[[type], type]:
-    """Регистрирует событие."""
+    """Создать декоратор, регистрирующий dataclass как событие.
+
+    Args:
+        code: Уникальный код события в registry.
+        title: Отображаемое название; по умолчанию имя класса.
+
+    Returns:
+        Декоратор, добавляющий метаданные классу и в registry.
+
+    Raises:
+        TypeError: Декорируемый класс не является dataclass.
+        ValueError: Событие с таким кодом уже зарегистрировано.
+    """
 
     def decorator(
         target: type,

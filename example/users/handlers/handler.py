@@ -1,28 +1,25 @@
+"""Обработка входящих событий в демонстрационном users-приложении."""
+
 from typing import Any
 
 
 def handle_example(message: dict[str, Any]) -> None:
-    """
-    Обработчик события создания контрольного образца.
+    """Проверить и вывести payload демонстрационного события.
 
-    Ожидает событие:
-    - source: источник (например pro2_dev)
-    - payload: данные образца
+    Args:
+        message: Десериализованное сообщение event bus с обязательным payload.
 
-    Делает:
-    - обогащает payload метаданными (creator)
-    - создаёт ControlSample
-    - применяет дефолтные действия
+    Raises:
+        ValueError: Payload отсутствует или пуст.
     """
     try:
         payload = message.get('payload') or {}
-        
+
         if not payload:
             raise ValueError('Empty payload')
-        
+
         print(payload)
-        
-    
+
     except Exception as e:
         print('ERROR processing ControlSample.create:', e)
         raise

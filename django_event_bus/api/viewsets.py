@@ -1,3 +1,5 @@
+"""HTTP-операции чтения зарегистрированных определений событий."""
+
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
@@ -12,7 +14,6 @@ class EventViewSet(
 
     def list(self, request):
         """Возвращает список зарегистрированных событий."""
-
         serializer = EventDefinitionSerializer(
             get_events(),
             many=True,
@@ -28,7 +29,6 @@ class EventViewSet(
         pk=None,
     ):
         """Возвращает описание зарегистрированного события."""
-
         serializer = EventDefinitionSerializer(
             get_event(
                 pk,

@@ -1,3 +1,5 @@
+"""Извлечение метаданных из dataclass-классов доменных событий."""
+
 import dataclasses
 from typing import get_type_hints
 
@@ -7,8 +9,11 @@ from django_event_bus.event_bus.events.metadata import EventField
 def get_event_fields(
     event: type,
 ) -> list[EventField]:
-    """Возвращает поля события."""
+    """Вернуть описания dataclass-полей события.
 
+    Raises:
+        TypeError: Переданный класс не является dataclass.
+    """
     if not dataclasses.is_dataclass(
         event,
     ):
@@ -52,8 +57,7 @@ def get_event_fields(
 def build_event_code(
     event: type,
 ) -> str:
-    """Строит код события."""
-
+    """Преобразовать CamelCase-имя класса события в точечный код."""
     name = event.__name__
 
     parts: list[str] = []
@@ -79,6 +83,5 @@ def build_event_code(
 def build_event_title(
     event: type,
 ) -> str:
-    """Строит название события."""
-
+    """Вернуть имя класса как отображаемое название события."""
     return event.__name__

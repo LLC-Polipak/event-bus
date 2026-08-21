@@ -1,3 +1,5 @@
+"""Примеры событий приложения users."""
+
 from dataclasses import asdict, dataclass
 from typing import ClassVar
 

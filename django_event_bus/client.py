@@ -1,3 +1,5 @@
+"""Создание event bus из конфигурации текущего Django-проекта."""
+
 from django.conf import settings
 
 from django_event_bus.event_bus.bus import EventBus
@@ -5,6 +7,7 @@ from django_event_bus.event_bus.config import EventBusConfig
 
 
 def get_event_bus() -> EventBus:
+    """Создать event bus с параметрами из Django settings."""
     conf = settings.EVENT_BUS
     config = EventBusConfig(
         host=conf.get('HOST', 'event-bus-rabbitmq'),

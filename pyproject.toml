@@ -30,6 +30,9 @@ AuthorGitHub = "https://github.com/Zamesov26"
 [tool.ruff]
 line-length = 88
 extend-exclude = [
+    "**/migrations/**",
+    "**/tests.py",
+    "**/tests/**",
     "**/__pycache__/**",
     ".venv/",
     "venv/",
@@ -39,8 +42,13 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-ignore = ["E501"]
+ignore = [
+    "E501",
+    "D105",  # Magic methods are self-describing.
+    "D107",  # Constructor arguments are described by the class and signature.
+]
 select = [
+    "A", # flake8-builtins
     "E", # pycodestyle
     "F", # Pyflakes
     "UP", # pyupgrade
@@ -48,7 +56,19 @@ select = [
     "SIM", # flake8-simplify
     "I", # isort
     "C", # flake8-comprehensions
+    "D", # pydocstyle
+    "LOG", # flake8-logging
+    "PIE", # flake8-pie
+    "PT", # flake8-pytest-style
+    "RET", # flake8-return
+    "RUF100", # unused-noqa
+    "S", # flake8-bandit
+    "T100", # flake8-debugger
+    "W", # pycodestyle warnings
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
 
 [tool.ruff.format]
 quote-style = "single"

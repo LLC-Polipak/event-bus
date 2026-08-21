@@ -1,3 +1,5 @@
+"""Объявление событий и доступ к их зарегистрированным метаданным."""
+
 from .decorators import event
 from .registry import get_event, get_events
 

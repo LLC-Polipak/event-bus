@@ -1,10 +1,12 @@
+"""Структуры метаданных зарегистрированных событий и их полей."""
+
 from dataclasses import dataclass
 from typing import Any
 
 
 @dataclass(slots=True)
 class EventField:
-    """Описывает поле зарегистрированного события."""
+    """Метаданные поля зарегистрированного dataclass-события."""
 
     name: str
     annotation: Any
@@ -14,7 +16,7 @@ class EventField:
 
 @dataclass(slots=True)
 class EventDefinition:
-    """Описывает зарегистрированное событие."""
+    """Метаданные класса события, доступные в registry и API."""
 
     code: str
     title: str
