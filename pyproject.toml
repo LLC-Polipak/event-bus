@@ -8,6 +8,7 @@ dependencies = [
     "Django>=3.2",
     "pika>=1.2.0",
 ]
+
 description = ""
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -19,6 +20,13 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Development Status :: 4 - Beta",
 ]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0,<9.0",
+    "pytest-django>=4.8,<5.0",
+]
+
 [tool.setuptools.packages.find]
 include = ["django_event_bus*"]
 exclude = ["infra*"]
