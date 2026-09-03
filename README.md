@@ -30,6 +30,7 @@ EVENT_BUS = {
     'SERVICE_NAME': 'my_service',
     'EXCHANGE': 'events',  # optional, default: 'events'
     'API_PATH': 'api/v1/events/',  # optional, default: 'api/v1/events/'
+    'CONSUMER_ENABLED': True,  # optional, default: True
     'CONSUMERS': [
         {
             'enabled': True,
@@ -110,6 +111,17 @@ event_bus.publish(UserCreated(user_id=123, email='user@example.com'))
 ```bash
 python manage.py run_event_consumer
 ```
+
+`CONSUMER_ENABLED=False` полностью отключает consumer: соединение с RabbitMQ
+не создаётся, а команда остаётся запущенной до получения `SIGTERM` или `SIGINT`.
+Это позволяет отключать consumer в контейнере без цикла перезапусков.
+
+Флаг `enabled=False` отключает отдельную подписку. По умолчанию глобальный
+consumer и каждая подписка включены. Обработчики отключённых подписок не
+импортируются, и очереди для них не создаются. Если включённых подписок нет,
+команда также ожидает сигнал завершения без подключения к RabbitMQ.
+Consumer должен запускаться в главном потоке процесса; попытка запуска из
+фонового потока завершается `RuntimeError`.
 
 ## Пример и тесты
 
