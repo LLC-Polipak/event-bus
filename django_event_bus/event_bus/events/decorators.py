@@ -1,5 +1,6 @@
 """Декораторы для объявления и регистрации dataclass-событий."""
 
+import inspect
 from collections.abc import Callable
 
 from django_event_bus.event_bus.events.introspection import (
@@ -14,6 +15,7 @@ def event(
     *,
     code: str,
     title: str | None = None,
+    description: str | None = None,
 ) -> Callable[[type], type]:
     """Создать декоратор, регистрирующий dataclass как событие.
 
@@ -38,7 +40,9 @@ def event(
             or build_event_title(
                 target,
             ),
-            description=target.__doc__,
+            description=(
+                description if description is not None else inspect.getdoc(target)
+            ),
             target=target,
             fields=get_event_fields(
                 target,

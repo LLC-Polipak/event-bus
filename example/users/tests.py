@@ -13,12 +13,43 @@ from users.events import (
 )
 
 
+def _legacy_event_projection(event: dict) -> dict:
+    """Оставить ключи прежнего API-контракта для проверки совместимости."""
+    projected = {key: event[key] for key in ('code', 'title', 'description', 'target')}
+    projected['fields'] = [_legacy_field_projection(item) for item in event['fields']]
+    return projected
+
+
+def _legacy_field_projection(event_field: dict) -> dict:
+    """Оставить прежние ключи поля, не скрывая вложенную структуру."""
+    projected = {
+        key: event_field[key] for key in ('name', 'annotation', 'required', 'default')
+    }
+    if 'fields' in event_field:
+        projected['fields'] = [
+            _legacy_field_projection(item) for item in event_field['fields']
+        ]
+    return projected
+
+
 def test_registered_user_event_is_available_in_event_list(client: Client) -> None:
     """Вернуть описание user.created в списке зарегистрированных событий."""
     response = client.get('/api/v1/events/')
 
     assert response.status_code == 200
-    events = response.json()
+    response_events = response.json()
+    assert response_events[0]['fields'][0] == {
+        'name': 'user_id',
+        'title': 'user_id',
+        'description': '',
+        'annotation': 'int',
+        'type': 'integer',
+        'required': True,
+        'nullable': False,
+        'default': None,
+        'example': None,
+    }
+    events = [_legacy_event_projection(item) for item in response_events]
 
     assert events[0] == {
         'code': 'user.created',

@@ -12,6 +12,11 @@ class EventField:
     annotation: Any
     required: bool
     default: Any
+    title: str = ''
+    description: str = ''
+    example: Any = None
+    type: str = 'unknown'
+    nullable: bool = False
     fields: list['EventField'] = field(default_factory=list)
 
 
