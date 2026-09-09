@@ -22,6 +22,16 @@ class EventFieldSerializer(
         allow_null=True,
     )
 
+    title = serializers.CharField()
+
+    description = serializers.CharField()
+
+    example = serializers.JSONField(allow_null=True)
+
+    type = serializers.CharField()
+
+    nullable = serializers.BooleanField()
+
     def get_annotation(
         self,
         obj: EventField,

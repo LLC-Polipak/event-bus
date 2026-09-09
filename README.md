@@ -96,6 +96,32 @@ def ready(self) -> None:
 Registry рекурсивно описывает поля вложенных dataclass-объектов. Generic-типы
 вроде `list[str]` и `dict[str, str]` также сохраняются в HTTP-ответе.
 
+Метаданные для каталога задаются рядом с самим полем и не меняют семантику
+конструктора dataclass:
+
+```python
+from django_event_bus.event_bus.events import event, event_field
+
+
+@event(
+    code='Claim.Created',
+    title='Претензия создана',
+    description='Возникает после успешной регистрации претензии.',
+)
+@dataclass(frozen=True)
+class ClaimCreated:
+    claim_id: int = event_field(
+        title='ID претензии',
+        description='Идентификатор зарегистрированной претензии.',
+        example=123,
+    )
+```
+
+Если `description` события не указан, каталог использует очищенный docstring.
+Для обычных dataclass-полей автоматически формируются title из имени,
+пустое описание, `example: null` и стабильный JSON-тип. `T | None` помечается
+как `nullable`, но остаётся обязательным, если у поля нет default.
+
 ## Публикация события
 
 ```python
